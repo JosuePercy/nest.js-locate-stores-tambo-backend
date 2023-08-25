@@ -3,6 +3,7 @@ import { TiendaService } from './tienda.service';
 import { Tiendas } from './entities/tienda.entity';
 import { TiendaDto } from './dto/tienda.modul';
 import { TiendaMap } from './dto/tiendaMap';
+import { RutasService } from '../rutas/rutas.service';
 
 @Controller('tiendas')
 export class TiendaController {
@@ -22,10 +23,14 @@ export class TiendaController {
     return this.tiendaService.findAllDTO();
   }
 
-  findAllTiendas_Ruta(): Promise<TiendaMap[]> {
-    Logger.log('pruebas', 'TiendasController');
-    return this.tiendaService.findAllDTO();
+  @Get('rutas')
+  findAllTiendas_Ruta() {
+    return this.tiendaService.findAllTiendas_Ruta();
   }
+  // findAllTiendas_Ruta(): Promise<TiendaMap[]> {
+  //   Logger.log('pruebas', 'TiendasController');
+  //   return this.tiendaService.findAllTiendas_Ruta();
+  // }
 
   @Post()
   create(@Body() userDto: TiendaDto[]) {

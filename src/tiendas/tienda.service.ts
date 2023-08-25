@@ -5,18 +5,23 @@ import {
   BadRequestException,
   InternalServerErrorException,
 } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { InjectDataSource, InjectRepository } from '@nestjs/typeorm';
+import { DataSource, Repository } from 'typeorm';
 import { Tiendas } from './entities/tienda.entity';
 import { TiendaDto } from './dto/tienda.modul';
 import { TiendaMap } from './dto/tiendaMap';
+import { RutasDiarias } from 'src/rutas/entities/ruta.entities';
 
 @Injectable()
 export class TiendaService {
   constructor(
     @InjectRepository(Tiendas)
-    private readonly tiendasRepository: Repository<Tiendas>,
+    private readonly tiendasRepository: Repository<Tiendas>, //@InjectRepository(RutaDiaria) //private readonly rutaDiariaRepository: Repository<RutaDiaria>,
+
+    @InjectDataSource()
+    private dataSource: DataSource,
   ) {}
+
   // async findAll(): Promise<TiendaDto[]> {
   //   let list = await this.tiendasRepository.query('select * from tiendas', [2]);
 
@@ -26,15 +31,15 @@ export class TiendaService {
   async findAllDTO(): Promise<TiendaMap[]> {
     const list: Tiendas[] = await this.tiendasRepository.query(
       `SELECT 
-        id, 
-        tienda, 
-        direccion, 
-        apertura_local, 
-        cierre_local, 
-        distrito, 
-        horario_permitido_de_recepcion, 
-        longitud, latitud 
-      FROM tiendas`,
+          id, 
+          tienda, 
+          direccion, 
+          apertura_local, 
+          cierre_local, 
+          distrito, 
+          horario_permitido_de_recepcion, 
+          longitud, latitud 
+        FROM tiendas`,
     );
     //console.log('list ==> ', list);
 
@@ -59,42 +64,49 @@ export class TiendaService {
     return tiendas;
   }
 
-  async findAllTiendas_Ruta(): Promise<TiendaMap[]> {
-    const list: Tiendas[] = await this.tiendasRepository.query(
-      `SELECT 
-        t.id,
-        t.tienda,
-        t.latitud,
-        t.longitud 
-      From rutas_diarias RD
-      INNER JOIN rutas_diarias_tiendas RDT
-      ON RD.id = RDT.id_rutas_diarias
-      INNER JOIN tiendas t ON t.id = RDT.id_tiendas 
-      WHERE 
-        RD.id_ruta = 7 AND 
-        DATE_FORMAT(RD.fecha_registro, '%Y/%m/%d') = DATE_FORMAT('2023/08/06', '%Y/%m/%d')`,
-    );
-    //console.log('list ==> ', list);
+  // async findAllTiendas_Ruta(): Promise<TiendaMap[]> {
+  //   const list: Tiendas[] = await this.tiendasRepository.query(
+  //     `SELECT
+  //       t.id,
+  //       t.tienda,
+  //       t.latitud,
+  //       t.longitud
+  //     From rutas_diarias RD
+  //     INNER JOIN rutas_diarias_tiendas RDT
+  //     ON RD.id = RDT.id_rutas_diarias
+  //     INNER JOIN tiendas t ON t.id = RDT.id_tiendas
+  //     WHERE
+  //       RD.id_ruta = 7 AND
+  //       DATE_FORMAT(RD.fecha_registro, '%Y/%m/%d') = DATE_FORMAT('2023/08/06', '%Y/%m/%d')`,
+  //   );
+  //   //console.log('list ==> ', list);
 
-    const tiendas: TiendaMap[] = list.map((tienda) => {
-      return {
-        id: tienda.id,
-        name: tienda.tienda,
-        direction: tienda.direccion,
-        schedule: {
-          open: tienda.apertura_local,
-          close: tienda.cierre_local,
-        },
-        district: tienda.distrito,
-        days_attention: tienda.dias_atencion,
-        coordinate: {
-          lat: parseFloat(tienda.latitud),
-          lng: parseFloat(tienda.longitud),
-        },
-      };
-    });
+  //   const tiendas: TiendaMap[] = list.map((tienda) => {
+  //     return {
+  //       id: tienda.id,
+  //       name: tienda.tienda,
+  //       direction: tienda.direccion,
+  //       schedule: {
+  //         open: tienda.apertura_local,
+  //         close: tienda.cierre_local,
+  //       },
+  //       district: tienda.distrito,
+  //       days_attention: tienda.dias_atencion,
+  //       coordinate: {
+  //         lat: parseFloat(tienda.latitud),
+  //         lng: parseFloat(tienda.longitud),
+  //       },
+  //     };
+  //   });
 
-    return tiendas;
+  //   return tiendas;
+  // }
+
+  // async findAllTiendas_Ruta(): Promise<RutaDiaria[]> {
+  //   return this.rutaDiariaRepository.query(`SELECT * FROM rutas_diarias`);
+  // }
+  async findAllTiendas_Ruta(): Promise<RutasDiarias[]> {
+    return this.dataSource.query(`SELECT * FROM rutas_diarias`);
   }
 
   async create(tiendaDto: TiendaDto[]): Promise<TiendaDto[]> {
