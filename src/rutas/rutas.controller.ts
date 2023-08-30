@@ -11,7 +11,6 @@ import { RutasService } from './rutas.service';
 
 import { Logger } from '@nestjs/common';
 import { RutasDiariasDto } from './dto/rutasDiarias';
-import { Rutas } from './entities/ruta.entities';
 
 @Controller('rutas')
 export class RutasController {

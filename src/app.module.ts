@@ -4,6 +4,7 @@ import 'dotenv/config';
 import { TiendaModule } from './tiendas/tienda.module';
 import { RutasModule } from './rutas/rutas.module';
 import { UserModule } from './users/user.module';
+import { LoginModule } from './authentication/login/login.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { UserModule } from './users/user.module';
     UserModule,
     TiendaModule,
     RutasModule,
+    LoginModule,
   ],
 })
 export class AppModule {}

@@ -13,7 +13,7 @@ export class UserController {
   }
 
   /* agregar metodo post */
-  // @Post('user')
+  // @Post('register')
   // async insertUser(@Body() user: UserDto) {
   //   // tiendasInfo.id_rutas_diarias = id;
   //   // return response.status(HttpStatus.OK).send(`Página del producto ${id}`);
