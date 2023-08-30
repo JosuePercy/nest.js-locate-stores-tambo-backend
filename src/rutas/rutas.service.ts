@@ -6,13 +6,7 @@ import {
 } from '@nestjs/common';
 import { InjectDataSource, InjectRepository } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
-import {
-  Rutas,
-  RutasDiarias,
-  RutasDiariasTiendas,
-  RutasTiendas,
-} from './entities/ruta.entities';
-import { Tiendas } from 'src/tiendas/entities/tienda.entity';
+import { RutasDiarias, RutasTiendas } from './entities/ruta.entities';
 import { RutasDiariasDto, TiendaRutaDto } from './dto/rutasDiarias';
 
 @Injectable()

@@ -3,6 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import 'dotenv/config';
 import { TiendaModule } from './tiendas/tienda.module';
 import { RutasModule } from './rutas/rutas.module';
+import { UserModule } from './users/user.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { RutasModule } from './rutas/rutas.module';
       autoLoadEntities: true,
       synchronize: true,
     }),
+    UserModule,
     TiendaModule,
     RutasModule,
   ],
